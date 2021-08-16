@@ -89,4 +89,9 @@ root@ip-172-31-0-143:~# kubectl get pods
 NAME                        READY   STATUS    RESTARTS   AGE
 my-nginx-6b74b79f57-88nbw   1/1     Running   0          30s
 my-nginx-6b74b79f57-ggsl2   1/1     Running   0          5s
+
+・サービス設定
+kubectl expose deployment my-nginx --port=80 --type=LoadBalancer
+・サービス確認
+kubectl get services
 ```
