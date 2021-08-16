@@ -1,2 +1,2 @@
 # kubernetes_test
-kubernetesoのテストをするリポジトリ
+kubernetesのテストをするリポジトリ
