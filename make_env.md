@@ -1,22 +1,29 @@
-** 容量は大きめじゃないとminikube起動でエラーになります
-
+* 容量は大きめじゃないとminikube起動でエラーになります
+```
 ・kubectlコマンドダウンロード
 curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+
 ・実行権限
 chmod +x ./kubectl
+
 ・pathに移動
 sudo mv ./kubectl /usr/local/bin/kubectl
+
 ・バージョン確認（kubectlコマンドが使用できること）
 kubectl version --client
 
 ・dockerインストール
 sudo apt-get update &&     sudo apt-get install docker.io -y
+
 ・minikubeコマンドダウンロード
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+
 ・実行権限付与
 chmod +x minikube
+
 ・pathに移動
 sudo mv minikube /usr/local/bin/
+
 ・バージョン確認（minikubeコマンドが使用できること）
 minikube version
 
@@ -25,10 +32,10 @@ sudo -i
    
 ・conntrackをインストール
 apt install conntrack
-
-
+```
 * 以降minikube起動からnginx公開までのコマンド履歴
-
+```
+・minikube起動
 root@ip-172-31-0-143:~# minikube start --vm-driver=none
 * minikube v1.22.0 on Ubuntu 20.04
 * Using the none driver based on user configuration
@@ -63,10 +70,8 @@ root@ip-172-31-0-143:~# minikube start --vm-driver=none
   - Using image gcr.io/k8s-minikube/storage-provisioner:v5
 * Enabled addons: storage-provisioner, default-storageclass
 * Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
-root@ip-172-31-0-143:~# history
-    1  apt install conntrack
-    2  minikube start --vm-driver=none
-    3  history
+
+・ステータス確認（起動していることを確認runnning）
 root@ip-172-31-0-143:~# minikube status
 minikube
 type: Control Plane
@@ -75,14 +80,21 @@ kubelet: Running
 apiserver: Running
 kubeconfig: Configured
 
+・deployment作成
 root@ip-172-31-0-143:~# kubectl create deployment --image nginx my-nginx
 deployment.apps/my-nginx created
+
+・ポッド確認
 root@ip-172-31-0-143:~# kubectl get pods
 NAME                        READY   STATUS              RESTARTS   AGE
 my-nginx-6b74b79f57-88nbw   0/1     ContainerCreating   0          8s
+
+・デプロイメント確認
 root@ip-172-31-0-143:~# kubectl get deployment
 NAME       READY   UP-TO-DATE   AVAILABLE   AGE
 my-nginx   1/1     1            1           14s
+
+・レプリカを2に設定
 root@ip-172-31-0-143:~# kubectl scale deployment --replicas 2 my-nginx
 deployment.apps/my-nginx scaled
 root@ip-172-31-0-143:~# kubectl get pods
@@ -90,8 +102,9 @@ NAME                        READY   STATUS    RESTARTS   AGE
 my-nginx-6b74b79f57-88nbw   1/1     Running   0          30s
 my-nginx-6b74b79f57-ggsl2   1/1     Running   0          5s
 
-・サービス設定
+・サービス設定（nginxをport80）
 kubectl expose deployment my-nginx --port=80 --type=LoadBalancer
+
 ・サービス確認
 kubectl get services
 ```
